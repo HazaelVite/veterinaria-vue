@@ -1,4 +1,31 @@
-<script setup></script>
+<script setup>
+import { reactive } from "vue";
+import Alerta from './Alerta.vue';
+
+const alerta = reactive({
+  tipo: '',
+  mensaje: ''
+});
+
+const values = reactive({
+  nombre: "",
+  propietario: "",
+  email: "",
+  alta: "",
+  sintomas: "",
+});
+
+const handleSubmit = () => {
+
+  if(Object.values(values).includes('')) {
+    alerta.tipo = 'error',
+    alerta.mensaje = 'Todos los campos son obligatorios'
+    return
+  }
+
+  console.log("Agregando paciente");
+}
+</script>
 
 <template>
   <div class="md:w-1/2">
@@ -7,7 +34,11 @@
       Añade pacientes y
       <span class="text-indigo-600 font-medium">Administralos</span>
     </p>
-    <form class="bg-white shadow-md rounded-lg py-10 px-5 mb-10">
+    <Alerta v-if="alerta.mensaje" :alerta="alerta"/>
+    <form 
+    class="bg-white shadow-md rounded-lg py-10 px-5 mb-10"
+    @submit.prevent="handleSubmit"
+    >
       <div class="mb-5">
         <label for="mascota" class="block text-gray-700 uppercase font-medium">
           Nombre mascota
@@ -17,11 +48,15 @@
           type="text"
           placeholder="Nombre de la mascota"
           class="border-2 w-full p-2 mt-3 placeholder-gray-400"
+          v-model="values.nombre"
         />
       </div>
 
       <div class="mb-5">
-        <label for="propietario" class="block text-gray-700 uppercase font-medium">
+        <label
+          for="propietario"
+          class="block text-gray-700 uppercase font-medium"
+        >
           Nombre propietario
         </label>
         <input
@@ -29,6 +64,7 @@
           type="text"
           placeholder="Nombre del propietario"
           class="border-2 w-full p-2 mt-3 placeholder-gray-400"
+          v-model="values.propietario"
         />
       </div>
 
@@ -41,6 +77,7 @@
           type="email"
           placeholder="Email del propietario"
           class="border-2 w-full p-2 mt-3 placeholder-gray-400"
+          v-model="values.email"
         />
       </div>
 
@@ -53,6 +90,7 @@
           type="date"
           placeholder="Fecha de alta"
           class="border-2 w-full p-2 mt-3 placeholder-gray-400"
+          v-model="values.alta"
         />
       </div>
 
@@ -64,13 +102,14 @@
           id="sintomas"
           placeholder="Escribe los sintomas del paciente"
           class="border-2 w-full p-2 mt-3 placeholder-gray-400 h-40"
+          v-model="values.sintomas"
         />
       </div>
 
-      <input 
-      type="submit"
-      class="bg-indigo-600 w-full p-3 text-white uppercase font-medium hover:bg-indigo-800 cursor-pointer transition-colors"
-      value="Registrar paciente"
+      <input
+        type="submit"
+        class="bg-indigo-600 w-full p-3 text-white uppercase font-medium hover:bg-indigo-800 cursor-pointer transition-colors"
+        value="Registrar paciente"
       />
     </form>
   </div>
