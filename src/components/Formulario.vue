@@ -7,39 +7,50 @@ const alerta = reactive({
   mensaje: "",
 });
 
-const emit = defineEmits(['update:nombre', 'update:propietario', 'update:email', 'update:alta', 'update:sintomas', 'guardar-paciente', 'eliminar-paciente'])
+const emit = defineEmits([
+  "update:nombre",
+  "update:propietario",
+  "update:email",
+  "update:alta",
+  "update:sintomas",
+  "guardar-paciente",
+  "eliminar-paciente",
+]);
 
 const props = defineProps({
   nombre: {
     type: String,
-    required: true
+    required: true,
   },
   propietario: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
-    required: true
+    required: true,
   },
   alta: {
     type: String,
-    required: true
+    required: true,
   },
   sintomas: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
 const handleSubmit = () => {
   if (Object.values(props).includes("")) {
-    (alerta.tipo = "error"),
-      (alerta.mensaje = "Todos los campos son obligatorios");
+    alerta.tipo = "error",
+    alerta.mensaje = "Todos los campos son obligatorios";
     return;
   }
-
-  emit('guardar-paciente')
+  alerta.mensaje = "Paciente agregado correctamente"
+  emit("guardar-paciente");
+  setTimeout(() => {
+    alerta.mensaje = ''
+  }, 3000)
 };
 </script>
 
@@ -88,7 +99,7 @@ const handleSubmit = () => {
 
       <div class="mb-5">
         <label for="email" class="block text-gray-700 uppercase font-medium">
-          Email
+          Correo Electronico
         </label>
         <input
           id="email"
@@ -109,7 +120,7 @@ const handleSubmit = () => {
           type="date"
           placeholder="Fecha de alta"
           class="border-2 w-full p-2 mt-3 placeholder-gray-400"
-          :value="email"
+          :value="alta"
           @input="$emit('update:alta', $event.target.value)"
         />
       </div>

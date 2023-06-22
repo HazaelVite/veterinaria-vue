@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, ref } from "vue";
+import { uid } from "uid";
 import Header from "./components/Header.vue";
 import Formulario from "./components/Formulario.vue";
 import Paciente from "./components/Paciente.vue";
@@ -16,13 +17,21 @@ const paciente = reactive({
 });
 
 const guardarPaciente = () => {
-  pacientes.value.push(paciente)
-}
+  pacientes.value.push({
+    ...paciente,
+  });
 
-const eliminarPaciente = () => {
+  // Reiniciar el objeto
+  Object.assign(paciente, {
+    nombre: "",
+    propietario: "",
+    email: "",
+    alta: "",
+    sintomas: "",
+  });
+};
 
-}
-
+const eliminarPaciente = () => {};
 </script>
 
 <template>
@@ -47,7 +56,7 @@ const eliminarPaciente = () => {
             Información de
             <span class="text-indigo-600 font-bold">Pacientes</span>
           </p>
-          <Paciente v-for="paciente in pacientes" :paciente="paciente"/>
+          <Paciente v-for="paciente in pacientes" :paciente="paciente" />
         </div>
         <p v-else class="mt-20 text-2xl text-center">No hay pacientes</p>
       </div>
