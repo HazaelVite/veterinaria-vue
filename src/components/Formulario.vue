@@ -38,6 +38,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  btnAccion: {
+    type: Boolean,
+    required: true
+  }
 });
 
 const handleSubmit = () => {
@@ -141,7 +145,7 @@ const handleSubmit = () => {
       <input
         type="submit"
         class="bg-indigo-600 w-full p-3 text-white uppercase font-medium hover:bg-indigo-800 cursor-pointer transition-colors"
-        value="Registrar paciente"
+        :value="btnAccion ? 'Registrar paciente' : 'Guardar cambios'"
       />
     </form>
   </div>

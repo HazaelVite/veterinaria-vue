@@ -7,6 +7,8 @@ import Paciente from "./components/Paciente.vue";
 
 const pacientes = ref([]);
 
+const btnAccion = ref(true)
+
 const paciente = reactive({
   id: null,
   nombre: "",
@@ -17,10 +19,16 @@ const paciente = reactive({
 });
 
 const guardarPaciente = () => {
-  pacientes.value.push({
-    ...paciente,
-    id: uid()
-  });
+  if(paciente.id) {
+    const { id } = paciente
+    const idx = pacientes.value.findIndex((state) => state.id === id)
+    pacientes.value[idx] = { ...paciente }
+  } else {
+    pacientes.value.push({
+      ...paciente,
+      id: uid()
+    });
+  }
 
   // Reiniciar el objeto
   Object.assign(paciente, {
@@ -29,16 +37,25 @@ const guardarPaciente = () => {
     email: "",
     alta: "",
     sintomas: "",
+    id: null
   });
+
+  btnAccion.value = true
 };
 
-const editarPaciente = (paciente) => {
-  const pacienteEditar = paciente.value.filter(paciente => paciente.id === id)[0]
+const editarPaciente = (id) => {
+  btnAccion.value = false
+  const pacienteEditar = pacientes.value.filter(paciente => paciente.id === id)[0]
   Object.assign(paciente, pacienteEditar)
 
 }
 
-const eliminarPaciente = () => {};
+const eliminarPaciente = (id) => {
+  const nuevaLista = pacientes.value.filter(paciente => paciente.id !== id)
+  console.log('eliminando', nuevaLista);
+  pacientes.value = nuevaLista 
+};
+
 </script>
 
 <template>
@@ -53,6 +70,7 @@ const eliminarPaciente = () => {};
         v-model:sintomas="paciente.sintomas"
         @guardar-paciente="guardarPaciente"
         @eliminar-paciente="eliminarPaciente"
+        :btnAccion="btnAccion"
       />
       <div class="md:w-1/2 md:h-screen overflow-y-scroll">
         <h3 class="font-medium text-3xl text-center">
@@ -63,7 +81,12 @@ const eliminarPaciente = () => {};
             Información de
             <span class="text-indigo-600 font-bold">Pacientes</span>
           </p>
-          <Paciente v-for="paciente in pacientes" :paciente="paciente" @editar-paciente="editarPaciente"/>
+          <Paciente 
+          v-for="paciente in pacientes" 
+          :paciente="paciente" 
+          @editar-paciente="editarPaciente"
+          @eliminar-paciente="eliminarPaciente"
+          />
         </div>
         <p v-else class="mt-20 text-2xl text-center">No hay pacientes</p>
       </div>
