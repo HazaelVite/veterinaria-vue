@@ -19,6 +19,7 @@ const paciente = reactive({
 const guardarPaciente = () => {
   pacientes.value.push({
     ...paciente,
+    id: uid()
   });
 
   // Reiniciar el objeto
@@ -30,6 +31,12 @@ const guardarPaciente = () => {
     sintomas: "",
   });
 };
+
+const editarPaciente = (paciente) => {
+  const pacienteEditar = paciente.value.filter(paciente => paciente.id === id)[0]
+  Object.assign(paciente, pacienteEditar)
+
+}
 
 const eliminarPaciente = () => {};
 </script>
@@ -56,7 +63,7 @@ const eliminarPaciente = () => {};
             Información de
             <span class="text-indigo-600 font-bold">Pacientes</span>
           </p>
-          <Paciente v-for="paciente in pacientes" :paciente="paciente" />
+          <Paciente v-for="paciente in pacientes" :paciente="paciente" @editar-paciente="editarPaciente"/>
         </div>
         <p v-else class="mt-20 text-2xl text-center">No hay pacientes</p>
       </div>
